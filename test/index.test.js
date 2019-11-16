@@ -170,6 +170,16 @@ describe('Link', () => {
     testLink({to: '/a/b'}, route.getUrls(routes.match('/a/b').query))
   })
 
+  test('with to and additional query', () => {
+    const {routes, route, testLink} = setup('/a/:b', 'a')
+    testLink({to: '/a/b', params: { foo: 'bar' }}, route.getUrls(routes.match('/a/b?foo=bar').query))
+  })
+
+  test('with to and additional query', () => {
+    const {routes, route, testLink} = setup('/a/:b', 'a')
+    testLink({to: '/a/b', params: { b: 'bar' }}, route.getUrls(routes.match('/a/b').query))
+  })
+
   test('with route not found', () => {
     setup('a').testLink({route: '/b'}, {href: '/b', as: '/b'})
   })

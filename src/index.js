@@ -63,8 +63,9 @@ class Routes {
       return {route, urls: route.getUrls(params), byName: true}
     } else {
       const {route, query} = this.match(nameOrUrl)
-      const href = route ? route.getHref(query) : nameOrUrl
-      const urls = {href, as: nameOrUrl}
+      const href = route ? route.getHref({ ...params, ...query}) : nameOrUrl
+      const as = route ? route.getAs(params, nameOrUrl) : nameOrUrl;
+      const urls = {href, as}
       return {route, urls}
     }
   }
@@ -148,8 +149,8 @@ class Route {
     return `${this.page}?${toQuerystring(params)}`
   }
 
-  getAs (params = {}) {
-    const as = this.toPath(params) || '/'
+  getAs (params = {}, _as) {
+    const as = _as || this.toPath(params) || '/'
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 
